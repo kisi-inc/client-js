@@ -7,7 +7,7 @@ The official KISI REST API client for JavaScript.
 var KisiClient = require('kisi-client-js');
 
 // instantiate a client
-var kisiClient = new KisiClient();
+var kisiClient = new KisiClient(options);
 
 // authenticate using email and password
 client.authenticate(email, password).then(function() {
@@ -17,6 +17,11 @@ client.authenticate(email, password).then(function() {
   });
 });
 ```
+## Options
+
+Options is an optional object with possible properties:
+
+- `camelize` (type: `boolean`) - changes response body properties from `snake_case` to `camelCase` (default: `true`)
 
 ## Issues, Bugs and Feedback
 
