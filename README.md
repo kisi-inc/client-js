@@ -22,6 +22,7 @@ client.authenticate(email, password).then(function() {
 Options is an optional object with possible properties:
 
 - `camelize` (type: `boolean`) - changes response body properties from `snake_case` to `camelCase` (default: `true`)
+- `timeout` (type: `Number`) - time in ms after which request is canceled (default: `0` - never)
 
 ## Issues, Bugs and Feedback
 
