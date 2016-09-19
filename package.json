@@ -4,7 +4,7 @@
   "description": "A JavaScript client for the Kisi API",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "babel src/index.js --out-file lib/index.js",
+    "build": "mkdir -p ./lib && babel src/index.js --out-file lib/index.js",
     "prepublish": "npm run build"
   },
   "dependencies": {
