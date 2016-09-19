@@ -1,34 +1,23 @@
 {
   "name": "kisi-client",
-  "version": "3.3.3",
-  "description": "JavaScript client for interacting with the KISI API",
-  "main": "lib/index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kisi-inc/client-js"
-  },
+  "version": "4.0.0",
+  "description": "A JavaScript client for the Kisi API",
+  "main": "./lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Carl <ce07c3@gmail.com>",
-  "license": "MIT",
-  "browserDependencies": {
-    "bluebird": "~ 2.9.24",
-    "humps": "~ 0.5.1",
-    "superagent-bluebird-promise": "~ 2.0.0"
+    "build": "babel src/index.js --out-file lib/index.js",
+    "prepublish": "npm run build"
   },
   "dependencies": {
-    "bluebird": "~2.9.24",
-    "humps": "~0.5.1",
-    "lodash": "~3.9.3",
-    "superagent": "~1.2.0",
-    "superagent-bluebird-promise": "~ 2.0.0"
+    "axios": "latest",
+    "humps": "latest"
   },
   "devDependencies": {
-    "browserify": "~ 9.0.8"
+    "babel-plugin-transform-regenerator": "latest",
+    "babel-polyfill": "latest",
+    "babel-preset-es2015": "latest",
+    "babel-preset-es2017": "latest"
   },
-  "bugs": {
-    "url": "https://github.com/kisi-inc/client-js/issues"
-  },
-  "homepage": "https://github.com/kisi-inc/client-js"
+  "engines": {
+    "node": "6.6.0"
+  }
 }
