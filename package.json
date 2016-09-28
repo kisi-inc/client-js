@@ -1,21 +1,27 @@
 {
   "name": "kisi-client",
   "version": "4.0.0",
+  "repository": "https://github.com/kisi-inc/client-js",
+  "license": "MIT",
   "description": "A JavaScript client for the Kisi API",
   "main": "./lib/index.js",
   "scripts": {
     "build": "mkdir -p ./lib && babel src/index.js --out-file lib/index.js",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "test": "npm run build && mocha --compilers js:babel-core/register"
   },
   "dependencies": {
     "axios": "latest",
     "humps": "latest"
   },
   "devDependencies": {
+    "axios-mock-adapter": "latest",
     "babel-plugin-transform-regenerator": "latest",
     "babel-polyfill": "latest",
     "babel-preset-es2015": "latest",
-    "babel-preset-es2017": "latest"
+    "babel-preset-es2017": "latest",
+    "chai": "latest",
+    "mocha": "latest"
   },
   "engines": {
     "node": "6.6.0"

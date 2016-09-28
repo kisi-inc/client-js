@@ -2,10 +2,20 @@ import axios from "axios"
 import babelPolyfill from "babel-polyfill"
 import humps from "humps"
 
+class KisiError extends Error {
+    constructor(status, code = "000000", reason = null) {
+        super("An error occurred interacting with the Kisi API.")
+
+        this.status = status
+        this.code = code
+        this.reason = reason
+    }
+}
+
 class Kisi {
     constructor(config = {}) {
         config = Object.assign(config, {
-            baseURL: `https://api.getkisi.com/`,
+            baseURL: "https://api.getkisi.com/",
             timeout: 5000,
             headers: {
                 "Accept": "application/json",
@@ -26,7 +36,7 @@ class Kisi {
             .interceptors
             .request
             .use(config => {
-                config.body = humps.decamelizeKeys(config.body)
+                config.data = humps.decamelizeKeys(config.data)
                 config.params = humps.decamelizeKeys(config.params)
 
                 return config
@@ -55,11 +65,24 @@ class Kisi {
                 const collectionRange = headers["x-collection-range"]
 
                 if (collectionRange !== undefined) {
-                    const rangeAndCount = collectionRange.split('/');
-                    const rangeStartAndEnd = rangeAndCount[0].split('-');
-                    const collectionStart = Number(rangeStartAndEnd[0]);
-                    const collectionEnd = Number(rangeStartAndEnd[1]);
-                    const collectionLimit = Number(collectionEnd - collectionStart + 1);
+                    const rangeAndCount = collectionRange.split('/')
+
+                    if (rangeAndCount[0] === "*") {
+                        response.data = {
+                            pagination: {
+                                offset: 0,
+                                limit: 0
+                            },
+                            data: response.data
+                        }
+
+                        return response
+                    }
+
+                    const rangeStartAndEnd = rangeAndCount[0].split('-')
+                    const collectionStart = Number(rangeStartAndEnd[0])
+                    const collectionEnd = Number(rangeStartAndEnd[1])
+                    const collectionLimit = Number(collectionEnd - collectionStart + 1)
 
                     response.data = {
                         pagination: {
@@ -86,7 +109,9 @@ class Kisi {
         this.setLoginSecret(null)
 
         try {
-            return await this.post(`users`, { user: { email, password } })
+            const response = await this.post(`users`, { user: { email, password, termsAndConditions: true } })
+
+            return response
         } catch (error) {
             return this.handleError(error)
         }
@@ -99,6 +124,8 @@ class Kisi {
             const response = await this.post(`logins`, { login: { type: "device" }, user: { email, password } })
 
             this.setLoginSecret(response.secret)
+
+            return response
         } catch (error) {
             return this.handleError(error)
         }
@@ -106,11 +133,11 @@ class Kisi {
 
     async signOut() {
         try {
-            await this.delete(`login`)
+            const response = await this.delete(`login`)
 
             this.setLoginSecret(null)
 
-            return true
+            return response
         } catch (error) {
             return this.handleError(error)
         }
@@ -142,23 +169,23 @@ class Kisi {
 
     async put(path, data = {}) {
         try {
-            await this
+            const response = await this
                 .client
                 .put(path, data)
 
-            return true
+            return response.data
         } catch (error) {
             return this.handleError(error)
         }
     }
 
-    async delete(path) {
+    async delete(path, params = {}) {
         try {
             const response = await this
                 .client
-                .delete(path)
+                .delete(path, { params })
 
-            return true
+            return response.data
         } catch (error) {
             return this.handleError(error)
         }
@@ -167,18 +194,18 @@ class Kisi {
     handleError(error) {
         if (error.response) {
             const response = error.response
+
             const status = response.status
             const data = response.data
-            const code = data.code || "000000"
 
-            if (data.error) {
-                throw ({ status, code, error: data.error })
-            } else if (data.errors) {
-                throw ({ status, code, errors: data.errors })
+            if (data) {
+                const code = data.code || "000000"
+                const reason = data.error || data.errors || code
+
+                throw (new KisiError(status, code, reason))
             } else {
-                throw ({ status, code, error: data })
+                throw (new KisiError(status))
             }
-            throw (data)
         } else {
             throw (error)
         }
