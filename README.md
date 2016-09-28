@@ -1,29 +1,43 @@
-# kisi-inc/client-js
-The official KISI REST API client for JavaScript.
+[![Build Status](https://travis-ci.org/kisi-inc/client-js.svg?branch=release-4.0.0)](https://travis-ci.org/kisi-inc/client-js)
 
-## Example Usage
+# kisi-inc/client-js
+
+A very simple JavaScript client for the Kisi API.
+
+# Installation
+
+Run `npm install kisi-client` or add `kisi-client: "4.0.0"` to your `package.json`.
+
+# Usage
 
 ```javascript
-var KisiClient = require('kisi-client-js');
+import Kisi from "kisi-client"
 
-// instantiate a client
-var kisiClient = new KisiClient(options);
+const kisiClient = new Kisi()
 
-// authenticate using email and password
-client.authenticate(email, password).then(function() {
-  // make some calls to the KISI API, e.g.:
-  client.get('keys', { limit: 10 }).then(function(response) {
-    console.log(response.body.items);
-  });
-});
+kisiClient
+    .signIn("email", "password")
+    .then(() => {
+        kisiClient
+            .get("places")
+            .then(places => console.log(places))
+
+        kisiClient
+            .get("places/1")
+            .then(place => console.log(place))
+
+        kisiClient
+            .post("locks/1/unlock")
+            .then(result => console.log(result))
+    })
+
 ```
-## Options
 
-Options is an optional object with possible properties:
+# Documentation
 
-- `camelize` (type: `boolean`) - changes response body properties from `snake_case` to `camelCase` (default: `true`)
-- `timeout` (type: `Number`) - time in ms after which request is canceled (default: `0` - never)
+<http://docs.kisiapi.apiary.io>
 
-## Issues, Bugs and Feedback
+# Support
 
-https://github.com/kisi-inc/client-js/issues
+- File issues here
+- Gitter dev channel (<https://gitter.im/kisi-inc/Lobby>).
