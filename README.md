@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/kisi-inc/client-js.svg?branch=release-4.0.0)](https://travis-ci.org/kisi-inc/client-js)
+[![Build Status](https://travis-ci.org/kisi-inc/client-js.svg?branch=release-4.0.0)](https://travis-ci.org/kisi-inc/client-js) [![npm version](https://badge.fury.io/js/kisi-client.svg)](https://badge.fury.io/js/kisi-client)
 
 # kisi-inc/client-js
 
