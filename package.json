@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "axios": "^0.14.0",
-    "humps": "^1.1.0"
+    "humps": "^1.1.0",
+    "qs": "^6.3.0"
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.6.1",

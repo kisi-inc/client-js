@@ -1,33 +1,23 @@
 import axios from "axios"
 import babelPolyfill from "babel-polyfill"
 import humps from "humps"
-
-class KisiError extends Error {
-    constructor(status, code = "000000", reason = null) {
-        super("An error occurred interacting with the Kisi API.")
-
-        this.status = status
-        this.code = code
-        this.reason = reason
-    }
-}
+import handleError from "./errors"
+import QueryObject from "./QueryObject"
+import globalConfig from "./config"
 
 class Kisi {
     constructor(config = {}) {
-        config = Object.assign(config, {
-            baseURL: "https://api.getkisi.com/",
-            timeout: 5000,
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            }
-        })
+        config = Object.assign({}, config, globalConfig.axiosDefaultConfig)
 
         this.client = axios.create(config)
 
         this.addDecamelizationRequestInterceptor()
         this.addCamelizationResponseInterceptor()
         this.addPaginationResponseInterceptor()
+
+        for (let collection of globalConfig.supportedEndpoints){
+            this[collection] = new QueryObject(this.client, collection)
+        }
     }
 
     addDecamelizationRequestInterceptor() {
@@ -113,7 +103,7 @@ class Kisi {
 
             return response
         } catch (error) {
-            return this.handleError(error)
+            return handleError(error)
         }
     }
 
@@ -127,7 +117,7 @@ class Kisi {
 
             return response
         } catch (error) {
-            return this.handleError(error)
+            return handleError(error)
         }
     }
 
@@ -139,7 +129,7 @@ class Kisi {
 
             return response
         } catch (error) {
-            return this.handleError(error)
+            return handleError(error)
         }
     }
 
@@ -151,7 +141,7 @@ class Kisi {
 
             return response.data
         } catch (error) {
-            return this.handleError(error)
+            return handleError(error)
         }
     }
 
@@ -163,7 +153,7 @@ class Kisi {
 
             return response.data
         } catch (error) {
-            return this.handleError(error)
+            return handleError(error)
         }
     }
 
@@ -175,7 +165,7 @@ class Kisi {
 
             return response.data
         } catch (error) {
-            return this.handleError(error)
+            return handleError(error)
         }
     }
 
@@ -187,27 +177,7 @@ class Kisi {
 
             return response.data
         } catch (error) {
-            return this.handleError(error)
-        }
-    }
-
-    handleError(error) {
-        if (error.response) {
-            const response = error.response
-
-            const status = response.status
-            const data = response.data
-
-            if (data) {
-                const code = data.code || "000000"
-                const reason = data.error || data.errors || code
-
-                throw (new KisiError(status, code, reason))
-            } else {
-                throw (new KisiError(status))
-            }
-        } else {
-            throw (error)
+            return handleError(error)
         }
     }
 }
