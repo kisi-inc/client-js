@@ -1,4 +1,4 @@
-let globalConfig = {
+export default globalConfig = {
     axiosDefaultConfig: {
         baseURL: "https://api.getkisi.com/",
         timeout: 5000,
@@ -10,5 +10,3 @@ let globalConfig = {
 
     supportedEndpoints: ["places", "groups", "locks"]
 }
-
-export default globalConfig
