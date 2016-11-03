@@ -1,9 +1,8 @@
 import qs from "qs"
 import handleError from "./errors"
 
-class QueryObject {
+class Query {
     constructor(client, endpoint) {
-
         this.client = client
         this.endpoint = endpoint
 
@@ -12,22 +11,21 @@ class QueryObject {
     }
 
     where(queryParams = {}) {
-        const clonedQueryObject = Object.assign(new QueryObject(), this)
-        clonedQueryObject.queryParams = queryParams
+        const clonedQuery = Object.assign(new Query(), this)
+        clonedQuery.queryParams = queryParams
 
-        return clonedQueryObject
+        return clonedQuery
     }
 
     paginate(paginationParams = {}) {
-        const clonedQueryObject = Object.assign(new QueryObject(), this)
-        clonedQueryObject.paginationParams = paginationParams
+        const clonedQuery = Object.assign(new Query(), this)
+        clonedQuery.paginationParams = paginationParams
 
-        return clonedQueryObject
+        return clonedQuery
     }
 
     async fetch() {
         try {
-
             const response = await this
                 .client
                 .get(this.endpoint, {params: Object.assign({}, this.queryParams, this.paginationParams)})
@@ -40,7 +38,6 @@ class QueryObject {
 
     async find(id) {
         try {
-
             const response = await this
                 .client
                 .get(this.endpoint+"/"+id)
@@ -59,4 +56,4 @@ class QueryObject {
     }
 }
 
-export default QueryObject
+export default Query

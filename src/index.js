@@ -1,13 +1,13 @@
 import axios from "axios"
 import babelPolyfill from "babel-polyfill"
-import humps from "humps"
-import handleError from "./errors"
-import QueryObject from "./QueryObject"
 import globalConfig from "./config"
+import handleError from "./error_handler"
+import humps from "humps"
+import Query from "./query"
 
 class Kisi {
     constructor(config = {}) {
-        config = Object.assign({}, config, globalConfig.axiosDefaultConfig)
+        config = Object.assign({}, globalConfig.axiosDefaultConfig, config)
 
         this.client = axios.create(config)
 
@@ -16,7 +16,7 @@ class Kisi {
         this.addPaginationResponseInterceptor()
 
         for (let collection of globalConfig.supportedEndpoints){
-            this[collection] = new QueryObject(this.client, collection)
+            this[collection] = new Query(this.client, collection)
         }
     }
 
