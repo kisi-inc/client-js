@@ -1,4 +1,4 @@
-const globalConfig = {
+let globalConfig = {
     axiosDefaultConfig: {
         baseURL: "https://api.getkisi.com/",
         timeout: 5000,
