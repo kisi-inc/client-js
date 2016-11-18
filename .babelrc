@@ -4,6 +4,7 @@
     "transform-regenerator"
   ],
   "presets": [
-    "babel-preset-es2017"
+    "babel-preset-es2017",
+    "es2015"
   ]
 }
