@@ -1,5 +1,7 @@
+/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 import { assert } from 'chai';
 import AxiosMockAdapter from 'axios-mock-adapter';
+
 import Kisi from '../lib/index';
 
 const kisiClient = new Kisi();
