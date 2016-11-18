@@ -6,7 +6,7 @@ A very simple JavaScript client for the Kisi API.
 
 # Installation
 
-Run `npm install kisi-client` or add `kisi-client: "4.0.0"` to your `package.json`.
+Run `npm install kisi-client` or add `kisi-client` to your `package.json` by running `npm install --save kisi-client`.
 
 # Usage
 
@@ -39,5 +39,5 @@ kisiClient
 
 # Support
 
-- File issues here
-- Gitter dev channel (<https://gitter.im/kisi-inc/Lobby>).
+- File issues on Github
+- Or visit our Gitter dev channel (<https://gitter.im/kisi-inc/Lobby>).
