@@ -1,5 +1,5 @@
 import axios from 'axios';
-import 'babel-polyfill';
+import 'regenerator-runtime/runtime';
 import humps from 'humps';
 
 class KisiError extends Error {
@@ -14,14 +14,17 @@ class KisiError extends Error {
 
 class Kisi {
   constructor(config = {}) {
-    const mergedConfig = Object.assign({
-      baseURL: 'https://api.getkisi.com/',
-      timeout: 5000,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+    const mergedConfig = Object.assign(
+      {
+        baseURL: 'https://api.getkisi.com/',
+        timeout: 5000,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }
       },
-    }, config);
+      config
+    );
 
     this.client = axios.create(mergedConfig);
 
@@ -31,95 +34,81 @@ class Kisi {
   }
 
   addDecamelizationRequestInterceptor() {
-    this
-            .client
-            .interceptors
-            .request
-            .use((config) => {
-              const newConfig = config;
+    this.client.interceptors.request.use(config => {
+      const newConfig = config;
 
-              newConfig.data = humps.decamelizeKeys(config.data);
-              newConfig.params = humps.decamelizeKeys(config.params);
+      newConfig.data = humps.decamelizeKeys(config.data);
+      newConfig.params = humps.decamelizeKeys(config.params);
 
-              return newConfig;
-            });
+      return newConfig;
+    });
   }
 
   addCamelizationResponseInterceptor() {
-    this
-            .client
-            .interceptors
-            .response
-            .use((response) => {
-              const newResponse = response;
+    this.client.interceptors.response.use(response => {
+      const newResponse = response;
 
-              newResponse.data = humps.camelizeKeys(response.data);
+      newResponse.data = humps.camelizeKeys(response.data);
 
-              return response;
-            });
+      return response;
+    });
   }
 
   addPaginationResponseInterceptor() {
-    this
-            .client
-            .interceptors
-            .response
-            .use((response) => {
-              const newResponse = response;
+    this.client.interceptors.response.use(response => {
+      const newResponse = response;
 
-              const headers = response.headers;
-              const collectionRange = headers['x-collection-range'];
+      const headers = response.headers;
+      const collectionRange = headers['x-collection-range'];
 
-              if (collectionRange !== undefined) {
-                const rangeAndCount = collectionRange.split('/');
+      if (collectionRange !== undefined) {
+        const rangeAndCount = collectionRange.split('/');
 
-                const collectionCount = Number(rangeAndCount[1]);
+        const collectionCount = Number(rangeAndCount[1]);
 
-                if (rangeAndCount[0] === '*') {
-                  newResponse.data = {
-                    pagination: {
-                      offset: 0,
-                      limit: 0,
-                      count: collectionCount,
-                    },
-                    data: response.data,
-                  };
+        if (rangeAndCount[0] === '*') {
+          newResponse.data = {
+            pagination: {
+              offset: 0,
+              limit: 0,
+              count: collectionCount
+            },
+            data: response.data
+          };
 
-                  return response;
-                }
+          return response;
+        }
 
-                const rangeStartAndEnd = rangeAndCount[0].split('-');
-                const collectionStart = Number(rangeStartAndEnd[0]);
-                const collectionEnd = Number(rangeStartAndEnd[1]);
-                const collectionLimit = (collectionEnd - collectionStart) + 1;
+        const rangeStartAndEnd = rangeAndCount[0].split('-');
+        const collectionStart = Number(rangeStartAndEnd[0]);
+        const collectionEnd = Number(rangeStartAndEnd[1]);
+        const collectionLimit = collectionEnd - collectionStart + 1;
 
-                newResponse.data = {
-                  pagination: {
-                    offset: collectionStart,
-                    limit: collectionLimit,
-                    count: collectionCount,
-                  },
-                  data: response.data,
-                };
-              }
+        newResponse.data = {
+          pagination: {
+            offset: collectionStart,
+            limit: collectionLimit,
+            count: collectionCount
+          },
+          data: response.data
+        };
+      }
 
-              return response;
-            });
+      return response;
+    });
   }
 
   setLoginSecret(secret) {
-    this
-            .client
-            .defaults
-            .headers
-            .common['X-Login-Secret'] = secret;
+    this.client.defaults.headers.common['X-Login-Secret'] = secret;
   }
 
   async signUp(email, password) {
     this.setLoginSecret(null);
 
     try {
-      const response = await this.post('users', { user: { email, password, termsAndConditions: true } });
+      const response = await this.post('users', {
+        user: { email, password, termsAndConditions: true }
+      });
 
       return response;
     } catch (error) {
@@ -131,7 +120,10 @@ class Kisi {
     this.setLoginSecret(null);
 
     try {
-      const response = await this.post('logins', { login: { type: 'device' }, user: { email, password } });
+      const response = await this.post('logins', {
+        login: { type: 'device' },
+        user: { email, password }
+      });
 
       this.setLoginSecret(response.secret);
 
@@ -155,9 +147,7 @@ class Kisi {
 
   async get(path, params = {}) {
     try {
-      const response = await this
-                .client
-                .get(path, { params });
+      const response = await this.client.get(path, { params });
 
       return response.data;
     } catch (error) {
@@ -167,9 +157,7 @@ class Kisi {
 
   async post(path, data = {}) {
     try {
-      const response = await this
-                .client
-                .post(path, data);
+      const response = await this.client.post(path, data);
 
       return response.data;
     } catch (error) {
@@ -179,9 +167,7 @@ class Kisi {
 
   async put(path, data = {}) {
     try {
-      const response = await this
-                .client
-                .put(path, data);
+      const response = await this.client.put(path, data);
 
       return response.data;
     } catch (error) {
@@ -191,9 +177,7 @@ class Kisi {
 
   async delete(path, params = {}) {
     try {
-      const response = await this
-                .client
-                .delete(path, { params });
+      const response = await this.client.delete(path, { params });
 
       return response.data;
     } catch (error) {
@@ -212,12 +196,12 @@ class Kisi {
         const code = data.code || '000000';
         const reason = data.error || data.errors || code;
 
-        throw (new KisiError(status, code, reason));
+        throw new KisiError(status, code, reason);
       } else {
-        throw (new KisiError(status));
+        throw new KisiError(status);
       }
     } else {
-      throw (error);
+      throw error;
     }
   }
 }

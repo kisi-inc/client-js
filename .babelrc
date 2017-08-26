@@ -1,10 +1,14 @@
 {
-  "plugins": [
-    "transform-es2015-modules-commonjs",
-    "transform-regenerator"
-  ],
   "presets": [
-    "babel-preset-es2017",
-    "es2015"
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "IE 11"
+          ]
+        }
+      }
+    ]
   ]
 }
