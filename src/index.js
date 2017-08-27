@@ -14,17 +14,15 @@ class KisiError extends Error {
 
 class Kisi {
   constructor(config = {}) {
-    const mergedConfig = Object.assign(
-      {
-        baseURL: 'https://api.getkisi.com/',
-        timeout: 5000,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
+    const mergedConfig = {
+      baseURL: 'https://api.getkisi.com/',
+      timeout: 5000,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
       },
-      config
-    );
+      ...config
+    };
 
     this.client = axios.create(mergedConfig);
 
