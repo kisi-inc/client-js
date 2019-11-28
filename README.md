@@ -35,7 +35,7 @@ kisiClient
 
 # Documentation
 
-<http://docs.kisiapi.apiary.io>
+<https://api.kisi.io/docs>
 
 # Support
 
