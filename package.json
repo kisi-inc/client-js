@@ -8,10 +8,10 @@
   "scripts": {
     "build": "mkdir -p ./lib && babel src/index.js --out-file lib/index.js",
     "prepublish": "npm run build",
-    "test": "npm run build && mocha --compilers js:babel-core/register"
+    "test": "npm run build && mocha --compilers js:@babel/core/register"
   },
   "dependencies": {
-    "axios": "^0.14.0",
+    "axios": "^0.18.1",
     "regenerator-runtime": "^0.11.0",
     "humps": "^1.1.0"
   },
