@@ -185,7 +185,7 @@ class Kisi {
 
   static handleError(error) {
     if (error.response) {
-      const { data, status } = error;
+      const { data, status } = error.response;
 
       if (data) {
         const code = data.code || '000000';

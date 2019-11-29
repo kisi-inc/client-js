@@ -7,8 +7,8 @@
   "main": "./lib/index.js",
   "scripts": {
     "build": "mkdir -p ./lib && babel src/index.js --out-file lib/index.js",
-    "prepublish": "npm run build",
-    "test": "npm run build && mocha --compilers js:@babel/core/register"
+    "prepublish": "yarn build",
+    "test": "yarn build && mocha --compilers js:@babel/register"
   },
   "dependencies": {
     "axios": "^0.19.0",
@@ -26,6 +26,7 @@
     "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.7.4",
+    "@babel/register": "^7.7.4",
     "axios-mock-adapter": "^1.6.1",
     "chai": "^3.5.0",
     "eslint": "^6.7.1",
