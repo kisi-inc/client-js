@@ -11,7 +11,7 @@
     "test": "npm run build && mocha --compilers js:babel-core/register"
   },
   "dependencies": {
-    "axios": "^0.14.0",
+    "axios": "^0.18.1",
     "regenerator-runtime": "^0.11.0",
     "humps": "^1.1.0"
   },
