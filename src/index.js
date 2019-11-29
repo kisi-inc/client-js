@@ -56,7 +56,7 @@ class Kisi {
     this.client.interceptors.response.use(response => {
       const newResponse = response;
 
-      const headers = response.headers;
+      const { headers } = response;
       const collectionRange = headers['x-collection-range'];
 
       if (collectionRange !== undefined) {
@@ -185,10 +185,7 @@ class Kisi {
 
   static handleError(error) {
     if (error.response) {
-      const response = error.response;
-
-      const status = response.status;
-      const data = response.data;
+      const { data, status } = error;
 
       if (data) {
         const code = data.code || '000000';
