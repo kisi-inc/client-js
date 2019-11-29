@@ -14,17 +14,15 @@ class KisiError extends Error {
 
 class Kisi {
   constructor(config = {}) {
-    const mergedConfig = {
-      baseURL: 'https://api.getkisi.com/',
+    this.client = axios.create({
+      baseURL: 'https://api.kisi.io/',
       timeout: 5000,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       ...config
-    };
-
-    this.client = axios.create(mergedConfig);
+    });
 
     this.addDecamelizationRequestInterceptor();
     this.addCamelizationResponseInterceptor();
