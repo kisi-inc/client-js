@@ -4,27 +4,28 @@
   "repository": "https://github.com/kisi-inc/client-js",
   "license": "MIT",
   "description": "A JavaScript client for the Kisi API",
-  "main": "./lib/index.js",
+  "main": "./lib/index.cjs",
+  "module": "./src/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "require": "./lib/index.cjs",
+      "default": "./src/index.js"
+    }
+  },
+  "sideeffects": false,
   "scripts": {
-    "build": "mkdir -p ./lib && babel src/index.js --out-file lib/index.js",
+    "build": "mkdir -p ./lib && babel src/index.js --out-file lib/index.cjs",
     "prepublish": "yarn build",
     "test": "yarn build && mocha --compilers js:@babel/register"
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "humps": "^1.1.0",
-    "regenerator-runtime": "^0.11.0"
+    "humps": "^1.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.7.4",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/plugin-proposal-export-default-from": "^7.7.4",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
-    "@babel/plugin-proposal-optional-chaining": "^7.7.4",
-    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.7.4",
-    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.7.4",
     "@babel/register": "^7.7.4",
     "axios-mock-adapter": "^1.6.1",

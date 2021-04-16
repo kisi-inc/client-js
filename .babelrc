@@ -5,9 +5,11 @@
       {
         "targets": {
           "browsers": [
-            "IE 11"
+            "since 2020",
+            "node 12"
           ]
-        }
+        },
+        "modules" : "cjs"
       }
     ]
   ]
