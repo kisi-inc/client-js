@@ -1,6 +1,6 @@
 {
   "name": "kisi-client",
-  "version": "7.0.1",
+  "version": "7.0.2",
   "repository": "https://github.com/kisi-inc/client-js",
   "license": "MIT",
   "description": "A JavaScript client for the Kisi API",
