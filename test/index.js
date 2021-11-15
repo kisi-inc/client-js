@@ -4,7 +4,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 
 import Kisi from '../src/index.js';
 
-const {assert} = chai;
+const { assert } = chai;
 
 const kisiClient = new Kisi();
 
@@ -16,15 +16,15 @@ describe('sign up, in and out', () => {
     axiosMockAdapter.onPost(/users$/).reply(
       200,
       {
-        email: 'test@kisi.io',
+        email: 'test@kisi.io'
       },
-      {},
+      {}
     );
 
     kisiClient
       .signUp('test@kisi.io', 'test')
       .then(result => {
-        assert.deepEqual(result, {email: 'test@kisi.io'});
+        assert.deepEqual(result, { email: 'test@kisi.io' });
 
         done();
       })
@@ -32,15 +32,15 @@ describe('sign up, in and out', () => {
   });
 
   it('should sign in', done => {
-    axiosMockAdapter.onPost(/logins$/).reply(200, {secret: 'secret'}, {});
+    axiosMockAdapter.onPost(/logins$/).reply(200, { secret: 'secret' }, {});
 
     kisiClient
       .signIn('test@kisi.io', 'test')
       .then(result => {
-        assert.deepEqual(result, {secret: 'secret'});
+        assert.deepEqual(result, { secret: 'secret' });
         assert.strictEqual(
-          kisiClient.client.defaults.headers.common['X-Login-Secret'],
-          'secret',
+          kisiClient.client.defaults.headers.common.Authorization,
+          'KISI-LOGIN secret'
         );
 
         done();
@@ -56,8 +56,8 @@ describe('sign up, in and out', () => {
       .then(result => {
         assert.strictEqual(result, null);
         assert.strictEqual(
-          kisiClient.client.defaults.headers.common['X-Login-Secret'],
-          null,
+          kisiClient.client.defaults.headers.common.Authorization,
+          null
         );
 
         done();
@@ -68,10 +68,10 @@ describe('sign up, in and out', () => {
 
 describe('CRUD', () => {
   it('should get', done => {
-    axiosMockAdapter.onGet(/get$/).reply(200, {id: 1}, {});
+    axiosMockAdapter.onGet(/get$/).reply(200, { id: 1 }, {});
 
     kisiClient
-      .get('get', {id: 1})
+      .get('get', { id: 1 })
       .then(result => {
         assert.strictEqual(result.id, 1);
 
@@ -83,7 +83,7 @@ describe('CRUD', () => {
   it('should get multiple', done => {
     axiosMockAdapter
       .onGet(/getMultiple$/)
-      .reply(200, [{}], {'x-collection-range': '0-0/2'});
+      .reply(200, [{}], { 'x-collection-range': '0-0/2' });
 
     kisiClient
       .get('getMultiple')
@@ -92,9 +92,9 @@ describe('CRUD', () => {
           pagination: {
             offset: 0,
             limit: 1,
-            count: 2,
+            count: 2
           },
-          data: [{}],
+          data: [{}]
         });
 
         done();
@@ -105,7 +105,7 @@ describe('CRUD', () => {
   it('should get empty multiple', done => {
     axiosMockAdapter
       .onGet(/getEmptyMultiple$/)
-      .reply(200, [], {'x-collection-range': '*/0'});
+      .reply(200, [], { 'x-collection-range': '*/0' });
 
     kisiClient
       .get('getEmptyMultiple')
@@ -114,9 +114,9 @@ describe('CRUD', () => {
           pagination: {
             offset: 0,
             limit: 0,
-            count: 0,
+            count: 0
           },
-          data: [],
+          data: []
         });
 
         done();
@@ -128,15 +128,15 @@ describe('CRUD', () => {
     axiosMockAdapter.onGet(/post$/).reply(
       200,
       {
-        id: 1,
+        id: 1
       },
-      {},
+      {}
     );
 
     kisiClient
-      .get('post', {id: 1})
+      .get('post', { id: 1 })
       .then(result => {
-        assert.deepEqual(result, {id: 1});
+        assert.deepEqual(result, { id: 1 });
 
         done();
       })
@@ -147,7 +147,7 @@ describe('CRUD', () => {
     axiosMockAdapter.onGet(/put$/).reply(204, null, {});
 
     kisiClient
-      .get('put', {id: 1})
+      .get('put', { id: 1 })
       .then(result => {
         assert.strictEqual(result, null);
 
@@ -174,9 +174,9 @@ describe('CRUD', () => {
       401,
       {
         code: 'abc123',
-        error: 'Not authorized',
+        error: 'Not authorized'
       },
-      {},
+      {}
     );
 
     kisiClient

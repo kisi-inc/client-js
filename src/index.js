@@ -18,9 +18,9 @@ class Kisi {
       timeout: 5000,
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      ...config,
+      ...config
     });
 
     this.addDecamelizationRequestInterceptor();
@@ -53,7 +53,7 @@ class Kisi {
     this.client.interceptors.response.use(response => {
       const newResponse = response;
 
-      const {headers} = response;
+      const { headers } = response;
       const collectionRange = headers['x-collection-range'];
 
       if (collectionRange !== undefined) {
@@ -66,9 +66,9 @@ class Kisi {
             pagination: {
               offset: 0,
               limit: 0,
-              count: collectionCount,
+              count: collectionCount
             },
-            data: response.data,
+            data: response.data
           };
 
           return response;
@@ -83,9 +83,9 @@ class Kisi {
           pagination: {
             offset: collectionStart,
             limit: collectionLimit,
-            count: collectionCount,
+            count: collectionCount
           },
-          data: response.data,
+          data: response.data
         };
       }
 
@@ -94,7 +94,9 @@ class Kisi {
   }
 
   setLoginSecret(secret) {
-    this.client.defaults.headers.common['X-Login-Secret'] = secret;
+    this.client.defaults.headers.common.Authorization = secret
+      ? `KISI-LOGIN ${secret}`
+      : null;
   }
 
   async signUp(email, password) {
@@ -102,7 +104,7 @@ class Kisi {
 
     try {
       const response = await this.post('users', {
-        user: {email, password, termsAndConditions: true},
+        user: { email, password, termsAndConditions: true }
       });
 
       return response;
@@ -116,8 +118,8 @@ class Kisi {
 
     try {
       const response = await this.post('logins', {
-        login: {type: 'device'},
-        user: {email, password},
+        login: { type: 'device' },
+        user: { email, password }
       });
 
       this.setLoginSecret(response.secret);
@@ -142,7 +144,7 @@ class Kisi {
 
   async get(path, params = {}) {
     try {
-      const response = await this.client.get(path, {params});
+      const response = await this.client.get(path, { params });
 
       return response.data;
     } catch (error) {
@@ -172,7 +174,7 @@ class Kisi {
 
   async delete(path, params = {}) {
     try {
-      const response = await this.client.delete(path, {params});
+      const response = await this.client.delete(path, { params });
 
       return response.data;
     } catch (error) {
@@ -182,7 +184,7 @@ class Kisi {
 
   static handleError(error) {
     if (error.response) {
-      const {data, status} = error.response;
+      const { data, status } = error.response;
 
       if (data) {
         const code = data.code || '000000';

@@ -23,6 +23,12 @@
     "axios": "^0.24.0",
     "humps": "^2.0.1"
   },
+  "prettier": {
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "trailingComma": "none",
+    "bracketSpacing": true
+  },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.7.4",
