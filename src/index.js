@@ -113,13 +113,13 @@ class Kisi {
     }
   }
 
-  async signIn(email, password) {
+  async signIn(user) {
     this.setLoginSecret(null);
 
     try {
       const response = await this.post('logins', {
         login: { type: 'device' },
-        user: { email, password }
+        user
       });
 
       this.setLoginSecret(response.secret);

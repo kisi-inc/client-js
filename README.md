@@ -10,13 +10,41 @@ Run `npm install kisi-client` or add `kisi-client` to your `package.json` by run
 
 # Usage
 
+To login into organization account,
+
 ```javascript
 import Kisi from "kisi-client"
 
 const kisiClient = new Kisi()
 
 kisiClient
-    .signIn("email", "password")
+    .signIn({ domain: 'organization-domain', email:  'email', password: 'password' })
+    .then(() => {
+        kisiClient
+            .get("places")
+            .then(places => console.log(places))
+
+        kisiClient
+            .get("places/1")
+            .then(place => console.log(place))
+
+        kisiClient
+            .post("locks/1/unlock")
+            .then(result => console.log(result))
+    })
+
+```
+
+
+To login into legacy account,
+
+```javascript
+import Kisi from "kisi-client"
+
+const kisiClient = new Kisi()
+
+kisiClient
+    .signIn({ email:  'email', password: 'password' })
     .then(() => {
         kisiClient
             .get("places")

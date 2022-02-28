@@ -35,7 +35,7 @@ describe('sign up, in and out', () => {
     axiosMockAdapter.onPost(/logins$/).reply(200, { secret: 'secret' }, {});
 
     kisiClient
-      .signIn('test@kisi.io', 'test')
+      .signIn({ email: 'test@kisi.io', password: 'test' })
       .then(result => {
         assert.deepEqual(result, { secret: 'secret' });
         assert.strictEqual(
