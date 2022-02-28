@@ -1,0 +1,24 @@
+name: 'CI Tests'
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          cache: 'npm'
+          node-version: '16'
+      - name: Install dependencies
+        run: yarn
+      - name: Lint
+        run: yarn eslint
+      - name: Test
+        run: yarn test
