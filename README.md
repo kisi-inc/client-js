@@ -35,32 +35,6 @@ kisiClient
 
 ```
 
-
-To login into legacy account,
-
-```javascript
-import Kisi from "kisi-client"
-
-const kisiClient = new Kisi()
-
-kisiClient
-    .signIn({ email:  'email', password: 'password' })
-    .then(() => {
-        kisiClient
-            .get("places")
-            .then(places => console.log(places))
-
-        kisiClient
-            .get("places/1")
-            .then(place => console.log(place))
-
-        kisiClient
-            .post("locks/1/unlock")
-            .then(result => console.log(result))
-    })
-
-```
-
 # Documentation
 
 <https://api.kisi.io/docs>
@@ -68,4 +42,3 @@ kisiClient
 # Support
 
 - File issues on Github
-- Or visit our Gitter dev channel (<https://gitter.im/kisi-inc/Lobby>).
