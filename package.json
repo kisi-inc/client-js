@@ -34,7 +34,7 @@
     "@babel/core": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "@babel/register": "^7.7.4",
-    "axios-mock-adapter": "^1.6.1",
+    "axios-mock-adapter": "^2.0.0",
     "chai": "^5.0.0",
     "eslint": "^8.3.0",
     "eslint-config-airbnb": "^19.0.0",
