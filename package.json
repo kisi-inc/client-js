@@ -20,7 +20,7 @@
     "test": "yarn build && mocha"
   },
   "dependencies": {
-    "axios": "^1.1.2",
+    "axios": "^1.7.3",
     "humps": "^2.0.1"
   },
   "prettier": {
