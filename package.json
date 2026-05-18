@@ -11,6 +11,7 @@
   },
   "sideeffects": false,
   "scripts": {
+    "lint": "oxlint src test",
     "test": "mocha"
   },
   "dependencies": {
@@ -26,14 +27,8 @@
   "devDependencies": {
     "axios-mock-adapter": "^2.0.0",
     "chai": "^6.0.1",
-    "eslint": "^8.3.0",
-    "eslint-config-airbnb": "^19.0.0",
-    "eslint-plugin-filenames": "1.3.2",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.16.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "mocha": "^11.0.1"
+    "mocha": "^11.0.1",
+    "oxlint": "^1.65.0"
   },
   "engines": {
     "node": ">=20.0.0"
