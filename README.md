@@ -19,9 +19,9 @@ const kisi = new Kisi();
 
 await kisi.signIn({ domain: 'organization-domain', email: 'email', password: 'password' });
 
-const places = await kisi.get('places');
-const place = await kisi.get('places/1');
-const result = await kisi.post('locks/1/unlock');
+const places = await kisi.get('/places');
+const place = await kisi.get('/places/1');
+const result = await kisi.post('/locks/1/unlock');
 ```
 
 # Documentation

@@ -12,7 +12,7 @@ class KisiError extends Error {
 
 class Kisi {
   constructor(config = {}) {
-    this.baseURL = config.baseURL ?? 'https://api.kisi.io/';
+    this.baseURL = config.baseURL ?? 'https://api.kisi.io';
     this.timeout = config.timeout ?? 5000;
     this.headers = {
       Accept: 'application/json',
@@ -27,7 +27,7 @@ class Kisi {
   }
 
   async request(method, path, { params, data } = {}) {
-    const url = new URL(path, this.baseURL);
+    const url = new URL(this.baseURL + path);
 
     if (params) {
       for (const [k, v] of Object.entries(humps.decamelizeKeys(params))) {
@@ -98,14 +98,14 @@ class Kisi {
 
   async signUp(email, password) {
     this.setLoginSecret(null);
-    return this.post('users', {
+    return this.post('/users', {
       user: { email, password, termsAndConditions: true }
     });
   }
 
   async signIn(user) {
     this.setLoginSecret(null);
-    const response = await this.post('logins', {
+    const response = await this.post('/logins', {
       login: { type: 'device' },
       user
     });
@@ -114,7 +114,7 @@ class Kisi {
   }
 
   async signOut() {
-    const response = await this.delete('login');
+    const response = await this.delete('/login');
     this.setLoginSecret(null);
     return response;
   }
