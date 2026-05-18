@@ -1,205 +1,106 @@
-/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
-import { assert } from 'chai';
-import AxiosMockAdapter from 'axios-mock-adapter';
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
 
 import Kisi from '../src/index.js';
 
 const kisiClient = new Kisi();
 
-const axiosMockAdapter = new AxiosMockAdapter(kisiClient.client);
+function mockFetch(status, body, headers = {}) {
+  global.fetch = async () => ({
+    ok: status >= 200 && status < 300,
+    status,
+    headers: { get: name => headers[name] ?? null },
+    json: async () => body
+  });
+}
 
-/* global describe it */
 describe('sign up, in and out', () => {
-  it('should sign up', done => {
-    axiosMockAdapter.onPost(/users$/).reply(
-      200,
-      {
-        email: 'test@kisi.io'
-      },
-      {}
-    );
-
-    kisiClient
-      .signUp('test@kisi.io', 'test')
-      .then(result => {
-        assert.deepEqual(result, { email: 'test@kisi.io' });
-
-        done();
-      })
-      .catch(error => done(error));
+  it('should sign up', async () => {
+    mockFetch(200, { email: 'test@kisi.io' }, { 'content-type': 'application/json' });
+    const result = await kisiClient.signUp('test@kisi.io', 'test');
+    assert.deepEqual(result, { email: 'test@kisi.io' });
   });
 
-  it('should sign in', done => {
-    axiosMockAdapter.onPost(/logins$/).reply(200, { secret: 'secret' }, {});
-
-    kisiClient
-      .signIn({ email: 'test@kisi.io', password: 'test' })
-      .then(result => {
-        assert.deepEqual(result, { secret: 'secret' });
-        assert.strictEqual(
-          kisiClient.client.defaults.headers.common.Authorization,
-          'KISI-LOGIN secret'
-        );
-
-        done();
-      })
-      .catch(error => done(error));
+  it('should sign in', async () => {
+    mockFetch(200, { secret: 'secret' }, { 'content-type': 'application/json' });
+    const result = await kisiClient.signIn({ email: 'test@kisi.io', password: 'test' });
+    assert.deepEqual(result, { secret: 'secret' });
+    assert.strictEqual(kisiClient.authorization, 'KISI-LOGIN secret');
   });
 
-  it('should sign out', done => {
-    axiosMockAdapter.onDelete(/login$/).reply(204, null, {});
-
-    kisiClient
-      .signOut()
-      .then(result => {
-        assert.strictEqual(result, null);
-        assert.strictEqual(
-          kisiClient.client.defaults.headers.common.Authorization,
-          null
-        );
-
-        done();
-      })
-      .catch(error => done(error));
+  it('should sign out', async () => {
+    mockFetch(204, null, {});
+    const result = await kisiClient.signOut();
+    assert.strictEqual(result, null);
+    assert.strictEqual(kisiClient.authorization, null);
   });
 });
 
 describe('CRUD', () => {
-  it('should get', done => {
-    axiosMockAdapter.onGet(/get$/).reply(200, { id: 1 }, {});
-
-    kisiClient
-      .get('get', { id: 1 })
-      .then(result => {
-        assert.strictEqual(result.id, 1);
-
-        done();
-      })
-      .catch(error => done(error));
+  it('should get', async () => {
+    mockFetch(200, { id: 1 }, { 'content-type': 'application/json' });
+    const result = await kisiClient.get('get', { id: 1 });
+    assert.strictEqual(result.id, 1);
   });
 
-  it('should get multiple', done => {
-    axiosMockAdapter
-      .onGet(/getMultiple$/)
-      .reply(200, [{}], { 'x-collection-range': '0-0/2' });
-
-    kisiClient
-      .get('getMultiple')
-      .then(result => {
-        assert.deepEqual(result, {
-          pagination: {
-            offset: 0,
-            limit: 1,
-            count: 2
-          },
-          data: [{}]
-        });
-
-        done();
-      })
-      .catch(error => done(error));
+  it('should get multiple', async () => {
+    mockFetch(200, [{}], { 'content-type': 'application/json', 'x-collection-range': '0-0/2' });
+    const result = await kisiClient.get('getMultiple');
+    assert.deepEqual(result, {
+      pagination: { offset: 0, limit: 1, count: 2 },
+      data: [{}]
+    });
   });
 
-  it('should get empty multiple', done => {
-    axiosMockAdapter
-      .onGet(/getEmptyMultiple$/)
-      .reply(200, [], { 'x-collection-range': '*/0' });
-
-    kisiClient
-      .get('getEmptyMultiple')
-      .then(result => {
-        assert.deepEqual(result, {
-          pagination: {
-            offset: 0,
-            limit: 0,
-            count: 0
-          },
-          data: []
-        });
-
-        done();
-      })
-      .catch(error => done(error));
+  it('should get empty multiple', async () => {
+    mockFetch(200, [], { 'content-type': 'application/json', 'x-collection-range': '*/0' });
+    const result = await kisiClient.get('getEmptyMultiple');
+    assert.deepEqual(result, {
+      pagination: { offset: 0, limit: 0, count: 0 },
+      data: []
+    });
   });
 
-  it('should post', done => {
-    axiosMockAdapter.onGet(/post$/).reply(
-      200,
-      {
-        id: 1
-      },
-      {}
-    );
-
-    kisiClient
-      .get('post', { id: 1 })
-      .then(result => {
-        assert.deepEqual(result, { id: 1 });
-
-        done();
-      })
-      .catch(error => done(error));
+  it('should post', async () => {
+    mockFetch(200, { id: 1 }, { 'content-type': 'application/json' });
+    const result = await kisiClient.get('post', { id: 1 });
+    assert.deepEqual(result, { id: 1 });
   });
 
-  it('should put', done => {
-    axiosMockAdapter.onGet(/put$/).reply(204, null, {});
-
-    kisiClient
-      .get('put', { id: 1 })
-      .then(result => {
-        assert.strictEqual(result, null);
-
-        done();
-      })
-      .catch(error => done(error));
+  it('should put', async () => {
+    mockFetch(204, null, {});
+    const result = await kisiClient.get('put', { id: 1 });
+    assert.strictEqual(result, null);
   });
 
-  it('should delete', done => {
-    axiosMockAdapter.onGet(/delete$/).reply(204, null, {});
-
-    kisiClient
-      .get('delete')
-      .then(result => {
-        assert.strictEqual(result, null);
-
-        done();
-      })
-      .catch(error => done(error));
+  it('should delete', async () => {
+    mockFetch(204, null, {});
+    const result = await kisiClient.get('delete');
+    assert.strictEqual(result, null);
   });
 
-  it('should fail', done => {
-    axiosMockAdapter.onGet(/fail$/).reply(
-      401,
-      {
-        code: 'abc123',
-        error: 'Not authorized'
-      },
-      {}
-    );
-
-    kisiClient
-      .get('fail')
-      .then(() => done(new Error('Should not happen')))
-      .catch(error => {
+  it('should fail', async () => {
+    mockFetch(401, { code: 'abc123', error: 'Not authorized' }, { 'content-type': 'application/json' });
+    await assert.rejects(
+      () => kisiClient.get('fail'),
+      error => {
         assert.strictEqual(error.status, 401);
         assert.strictEqual(error.code, 'abc123');
         assert.strictEqual(error.reason, 'Not authorized');
-
-        done();
-      });
+        return true;
+      }
+    );
   });
 
-  it('should fail without reason', done => {
-    axiosMockAdapter.onGet(/failWithoutReason$/).reply(401, null, {});
-
-    kisiClient
-      .get('failWithoutReason')
-      .then(() => done(new Error('Should not happen')))
-      .catch(error => {
+  it('should fail without reason', async () => {
+    mockFetch(401, null, {});
+    await assert.rejects(
+      () => kisiClient.get('failWithoutReason'),
+      error => {
         assert.strictEqual(error.status, 401);
         assert.strictEqual(error.code, '000000');
-
-        done();
-      });
+        return true;
+      }
+    );
   });
 });
