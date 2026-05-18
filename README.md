@@ -17,7 +17,7 @@ import Kisi from 'kisi-client';
 
 const kisi = new Kisi();
 
-await kisi.signIn({ email: 'email', password: 'password' });
+await kisi.signIn({ domain: 'organization-domain', email: 'email', password: 'password' });
 
 const places = await kisi.get('places');
 const place = await kisi.get('places/1');
