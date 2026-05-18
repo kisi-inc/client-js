@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/kisi-inc/client-js.svg?branch=release-4.0.0)](https://travis-ci.org/kisi-inc/client-js) [![npm version](https://badge.fury.io/js/kisi-client.svg)](https://badge.fury.io/js/kisi-client)
+[![npm version](https://badge.fury.io/js/kisi-client.svg)](https://badge.fury.io/js/kisi-client)
 
 # kisi-inc/client-js
 
@@ -6,33 +6,22 @@ A very simple JavaScript client for the Kisi API.
 
 # Installation
 
-Run `npm install kisi-client` or add `kisi-client` to your `package.json` by running `npm install --save kisi-client`.
+```sh
+pnpm add kisi-client
+```
 
 # Usage
 
-To login into organization account,
-
 ```javascript
-import Kisi from "kisi-client"
+import Kisi from 'kisi-client';
 
-const kisiClient = new Kisi()
+const kisi = new Kisi();
 
-kisiClient
-    .signIn({ domain: 'organization-domain', email:  'email', password: 'password' })
-    .then(() => {
-        kisiClient
-            .get("places")
-            .then(places => console.log(places))
+await kisi.signIn({ email: 'email', password: 'password' });
 
-        kisiClient
-            .get("places/1")
-            .then(place => console.log(place))
-
-        kisiClient
-            .post("locks/1/unlock")
-            .then(result => console.log(result))
-    })
-
+const places = await kisi.get('places');
+const place = await kisi.get('places/1');
+const result = await kisi.post('locks/1/unlock');
 ```
 
 # Documentation
